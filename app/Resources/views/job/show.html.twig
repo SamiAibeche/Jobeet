@@ -1,0 +1,43 @@
+{% extends 'layout.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/ensjobeet/css/jobs.css') }}" type="text/css" media="all" />
+{% endblock %}
+
+{% block body %}
+    <div id="job">
+    <h1>{{ job.company }}</h1>
+    <h2>{{ job.location }}</h2>
+    <h3>
+        {{ job.position }}
+        <small> - {{ job.type }}</small>
+    </h3>
+
+    {% if job.logo %}
+        <div class="logo">
+            <a href="{{ job.url }}">
+                <img src="{{ asset('bundles/ensjobeet/images/'~job.logo) }}"
+                     alt="{{ job.company }} logo" />
+            </a>
+        </div>
+    {% endif %}
+
+    <div class="description">
+        {{ job.description|nl2br }}
+    </div>
+
+    <h3 id="howH4"><strong style="color:blue;">How to apply?</strong></h3>
+
+    <p class="how_to_apply">{{ job.howtoapply }}</p>
+
+    <div class="meta">
+        <small>posted on {{ job.createdat|date('m/d/Y') }}</small>
+    </div>
+
+    <div style="padding: 20px 0">
+        <a href="{{ path('ens_job_edit', { 'id': job.id }) }}">
+            Edit
+        </a>
+    </div>
+    </div>
+{% endblock %}
