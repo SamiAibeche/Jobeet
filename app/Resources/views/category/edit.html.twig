@@ -1,11 +1,11 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('bundles/ensjobeet/css/jobs.css') }}" type="text/css" media="all" />
 {% endblock %}
 
 {% block body %}
-    <h1>Job edit</h1>
+    <h1>Category edit</h1>
 
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}
@@ -14,7 +14,7 @@
 
     <ul>
         <li>
-            <a href="{{ path('ens_job_index') }}">Back to the list</a>
+            <a href="{{ path('ens_category_index') }}">Back to the list</a>
         </li>
         <li>
             {{ form_start(delete_form) }}

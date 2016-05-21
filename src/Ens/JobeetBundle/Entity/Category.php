@@ -3,6 +3,7 @@
 namespace Ens\JobeetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Ens\JobeetBundle\Utils\Jobeet;
 
 /**
  * Category
@@ -48,6 +49,8 @@ class Category
     private $category_affiliates;
 
     private $active_jobs;
+
+    private $more_jobs;
 
     /**
      * ToString Method
@@ -106,13 +109,22 @@ class Category
     }
 
     /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function setSlugValue()
+    {
+        $this->slug = Jobeet::slugify($this->getName());
+    }
+
+    /**
      * Get slug
      *
      * @return string 
      */
     public function getSlug()
     {
-        return $this->slug;
+        return Jobeet::slugify($this->getName());
     }
 
 
@@ -146,5 +158,14 @@ class Category
     public function getActiveJobs()
     {
         return $this->active_jobs;
+    }
+    public function setMoreJobs($jobs)
+    {
+        $this->more_jobs = $jobs >=  0 ? $jobs : 0;
+    }
+
+    public function getMoreJobs()
+    {
+        return $this->more_jobs;
     }
 }

@@ -1,8 +1,16 @@
-ens_jobeet:
+EnsJobeetBundle_category:
+    pattern:  /ens_category/{slug}
+    defaults: { _controller: EnsJobeetBundle:Category:show }
+
+ens_category:
     resource: "@EnsJobeetBundle/Controller/"
     type:     annotation
     prefix:   /
 
+ens_jobeet:
+    resource: "@EnsJobeetBundle/Controller/"
+    type:     annotation
+    prefix:   /
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
