@@ -35,23 +35,32 @@ class JobRepository extends EntityRepository
         return $query->getResult();
     }
 
-    public function getActiveJob($id)
+    public function getActiveJob($category_id = null, $max = null, $offset = null)
     {
-        $query = $this->createQueryBuilder('j')
-            ->where('j.id = :id')
-            ->setParameter('id', $id)
-            ->andWhere('j.expires_at > :date')
+        $qb = $this->createQueryBuilder('j')
+            ->where('j.expires_at > :date')
             ->setParameter('date', date('Y-m-d H:i:s', time()))
-            ->setMaxResults(1)
-            ->getQuery();
+            ->orderBy('j.expires_at', 'DESC');
 
-        try {
-            $job = $query->getSingleResult();
-        } catch (\Doctrine\Orm\NoResultException $e) {
-            $job = null;
+        if($max)
+        {
+            $qb->setMaxResults($max);
         }
 
-        return $job;
+        if($offset)
+        {
+            $qb->setFirstResult($offset);
+        }
+
+        if($category_id)
+        {
+            $qb->andWhere('j.category = :category_id')
+                ->setParameter('category_id', $category_id);
+        }
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
     }
 
     public function countActiveJobs($category_id = null)

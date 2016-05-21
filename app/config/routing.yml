@@ -1,6 +1,6 @@
 EnsJobeetBundle_category:
     pattern:  /ens_category/{slug}
-    defaults: { _controller: EnsJobeetBundle:Category:show }
+    defaults: { _controller: EnsJobeetBundle:Category:show, page: 1}
 
 ens_category:
     resource: "@EnsJobeetBundle/Controller/"
