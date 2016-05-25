@@ -84,14 +84,18 @@ class JobController extends Controller
     /**
      * Displays a form to edit an existing Job entity.
      *
-     * @Route("/{id}/edit", name="ens_job_edit")
+     * @Route("/{token}/edit", name="ens_job_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Job $job)
+    public function editAction($token)
     {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $job = $em->getRepository('EnsJobeetBundle:Job')->findOneByToken($token);
+
         $deleteForm = $this->createDeleteForm($job);
         $editForm = $this->createForm('Ens\JobeetBundle\Form\JobType', $job);
-        $editForm->handleRequest($request);
+
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();

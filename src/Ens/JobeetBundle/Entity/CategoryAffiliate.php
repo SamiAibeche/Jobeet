@@ -92,4 +92,17 @@ class CategoryAffiliate
     {
         return $this->affiliate;
     }
+
+    /**
+     * Set affiliate
+     *
+     * @param \Ens\JobeetBundle\Entity\Affiliate $affiliate
+     * @return CategoryAffiliate
+     */
+    public function setAffiliate(\Ens\JobeetBundle\Entity\Affiliate $affiliate = null)
+    {
+        $this->affiliate = $affiliate;
+
+        return $this;
+    }
 }

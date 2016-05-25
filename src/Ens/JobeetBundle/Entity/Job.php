@@ -3,6 +3,7 @@
 namespace Ens\JobeetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Job
@@ -25,14 +26,14 @@ class Job
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="type", type="string", length=255, nullable=true)
      */
     private $type;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="company", type="string", length=255)
      */
     private $company;
@@ -53,35 +54,35 @@ class Job
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="position", type="string", length=255)
      */
     private $position;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="location", type="string", length=255)
      */
     private $location;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="description", type="text")
      */
     private $description;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="how_to_apply", type="text")
      */
     private $howToApply;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="token", type="string", length=255, unique=true)
      */
     private $token;
@@ -102,8 +103,8 @@ class Job
 
     /**
      * @var string
-     *
      * @ORM\Column(name="email", type="string", length=255)
+     * @Assert\NotBlank
      */
     private $email;
 
@@ -133,8 +134,13 @@ class Job
      */
     private $category;
 
-
-
+    /**
+     * @var file
+     * @Assert\File(
+     *   mimeTypes = {"application/jpg", "application/png", "application/gif"}
+     * )
+     */
+    public $file;
 
     /**
      * Get id
@@ -167,6 +173,16 @@ class Job
     public function getType()
     {
         return $this->type;
+    }
+
+    public static function getTypes()
+    {
+        return array('full-time' => 'Full time', 'part-time' => 'Part time', 'freelance' => 'Freelance');
+    }
+
+    public static function getTypeValues()
+    {
+        return array_keys(self::getTypes());
     }
 
     /**
@@ -342,7 +358,16 @@ class Job
 
         return $this;
     }
-
+    /**
+     * @ORM\prePersist
+     */
+    public function setTokenValue()
+    {
+        if(!$this->getToken())
+        {
+            $this->token = sha1($this->getEmail().rand(11111, 99999));
+        }
+    }
     /**
      * Get token
      *
@@ -424,7 +449,8 @@ class Job
 
     /**
      * Set expiresAt
-     *
+     * 
+     * @ORM\prePersist
      * @param \DateTime $expiresAt
      * @return Job
      */
@@ -448,6 +474,7 @@ class Job
     /**
      * Set createdAt
      *
+     * @ORM\prePersist
      * @param \DateTime $createdAt
      * @return Job
      */
@@ -559,6 +586,62 @@ class Job
     public function getLocationSlug()
     {
         return $this->slugify($this->getLocation());
+    }
+
+    protected function getUploadDir()
+    {
+        return 'uploads/jobs';
+    }
+
+    protected function getUploadRootDir()
+    {
+        return __DIR__.'/../../../../web/ensjobeet/images'.$this->getUploadDir();
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->logo ? null : $this->getUploadDir().'/'.$this->logo;
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->logo ? null : $this->getUploadRootDir().'/'.$this->logo;
+    }
+    /**
+     * @ORM\prePersist
+     */
+    public function preUpload()
+    {
+        if (null !== $this->file) {
+            // do whatever you want to generate a unique name
+            $this->logo = uniqid().'.'.$this->file->guessExtension();
+        }
+    }
+
+    /**
+     * @ORM\postPersist
+     */
+    public function upload()
+    {
+        if (null === $this->file) {
+            return;
+        }
+
+        // if there is an error when moving the file, an exception will
+        // be automatically thrown by move(). This will properly prevent
+        // the entity from being persisted to the database on error
+        $this->file->move($this->getUploadRootDir(), $this->logo);
+
+        unset($this->file);
+    }
+    /**
+     * @ORM\postRemove
+     */
+    public function removeUpload()
+    {
+        if ($file = $this->getAbsolutePath()) {
+            unlink($file);
+        }
     }
 
 }

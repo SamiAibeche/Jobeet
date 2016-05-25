@@ -168,4 +168,58 @@ class Category
     {
         return $this->more_jobs;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->jobs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->category_affiliates = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add jobs
+     *
+     * @param \Ens\JobeetBundle\Entity\Job $jobs
+     * @return Category
+     */
+    public function addJob(\Ens\JobeetBundle\Entity\Job $jobs)
+    {
+        $this->jobs[] = $jobs;
+
+        return $this;
+    }
+
+    /**
+     * Remove jobs
+     *
+     * @param \Ens\JobeetBundle\Entity\Job $jobs
+     */
+    public function removeJob(\Ens\JobeetBundle\Entity\Job $jobs)
+    {
+        $this->jobs->removeElement($jobs);
+    }
+
+    /**
+     * Add category_affiliates
+     *
+     * @param \Ens\JobeetBundle\Entity\CategoryAffiliate $categoryAffiliates
+     * @return Category
+     */
+    public function addCategoryAffiliate(\Ens\JobeetBundle\Entity\CategoryAffiliate $categoryAffiliates)
+    {
+        $this->category_affiliates[] = $categoryAffiliates;
+
+        return $this;
+    }
+
+    /**
+     * Remove category_affiliates
+     *
+     * @param \Ens\JobeetBundle\Entity\CategoryAffiliate $categoryAffiliates
+     */
+    public function removeCategoryAffiliate(\Ens\JobeetBundle\Entity\CategoryAffiliate $categoryAffiliates)
+    {
+        $this->category_affiliates->removeElement($categoryAffiliates);
+    }
 }
