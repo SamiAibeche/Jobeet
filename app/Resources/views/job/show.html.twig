@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block body %}
+    {% if app.request.get('token') %}
+        {{ include('admin.html.twig', { 'job': job }) }}
+    {% endif %}
     <div id="job">
     <h1>{{ job.company }}</h1>
     <h2>{{ job.location }}</h2>
@@ -34,10 +37,5 @@
         <small>posted on {{ job.createdat|date('m/d/Y') }}</small>
     </div>
 
-    <div style="padding: 20px 0">
-        <a href="{{ path('ens_job_edit', { 'token': job.token }) }}">
-            Edit
-        </a>
-    </div>
     </div>
 {% endblock %}

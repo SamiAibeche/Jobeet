@@ -1,7 +1,9 @@
+
 <table class="jobs">
     <tr>
-        <th>Location</th>
-        <th>Country</th>
+        <th>Location & Country</th>
+        <th>Fonction</th>
+        <th>Token</th>
         <th>Company</th>
     </tr>
     </tr>
@@ -11,6 +13,11 @@
             <td class="position">
                 <a href="{{ path('ens_job_show', { 'id': entity.id, 'company': entity.companyslug, 'location': entity.locationslug, 'position': entity.positionslug }) }}">
                     {{ entity.position }}
+                </a>
+            </td>
+            <td class="position">
+                <a href="{{ path('ens_job_preview', { 'token': entity.token }) }}">
+                    {{ entity.token }}
                 </a>
             </td>
             <td class="company">{{ entity.company }}</td>

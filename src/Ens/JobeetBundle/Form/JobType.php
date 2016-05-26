@@ -24,7 +24,8 @@ class JobType extends AbstractType
                 ->add('position')
                 ->add('location')
                 ->add('description')
-                ->add('how_to_apply', null, array('label' => 'How to apply?'))
+                ->add('token')
+                ->add('howToApply', null, array('label' => 'How to apply?'))
                 ->add('is_public', null, array('label' => 'Public?'))
                 ->add('email');
 
@@ -40,8 +41,9 @@ class JobType extends AbstractType
         ));
     }
 
+
     public function getName()
     {
-        return 'ens_jobeetbundle_jobtype';
+        return 'job';
     }
 }
