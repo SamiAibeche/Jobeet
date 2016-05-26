@@ -80,6 +80,32 @@ class JobController extends Controller
     {
         $deleteForm = $this->createDeleteForm($job);
 
+        $session = $this->getRequest()->getSession();
+
+        $tabJobs = $session->get('job_history', array());
+
+        $curJob = $job = array(
+            'id' => $job->getId(),
+            'position' =>$job->getPosition(),
+            'company' => $job->getCompany(),
+            'location' => $job->getLocationSlug(),
+            'position' => $job->getPositionSlug(),
+            'type' => $job->getType(),
+            'logo' => $job->getLogo(),
+            'url' => $job->getUrl(),
+            'description' => $job->getDescription(),
+            'howtoapply' => $job->getHowToApply(),
+            'createdat' => $job->getCreatedAt() );
+
+
+        if (!in_array($curJob, $tabJobs)) {
+            // add the current job at the beginning of the array
+            array_unshift($tabJobs, $curJob);
+
+            // store the new job history back into the session
+            $session->set('job_history', array_slice($tabJobs, 0, 3));
+        }
+
         return $this->render('job/show.html.twig', array(
             'job' => $job,
             'delete_form' => $deleteForm->createView(),
@@ -264,4 +290,5 @@ class JobController extends Controller
             ->getForm()
             ;
     }
+
 }

@@ -27,4 +27,11 @@ _sonata_admin:
     resource: .
     type: sonata_admin
     prefix: /admin
+login:
+    pattern:   /login
+    defaults:  { _controller: EnsJobeetBundle:Default:login }
+login_check:
+    pattern:   /login_check
+logout:
+    pattern:   /logout
 
