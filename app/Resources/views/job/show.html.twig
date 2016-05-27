@@ -5,6 +5,9 @@
 {% endblock %}
 
 {% block body %}
+    <div class="feed">
+        <a href="{{ path('EnsJobeetBundle_category', { 'slug': category.slug, '_format': 'atom' }) }}">Feed</a>
+    </div>
     {% if app.request.get('token') %}
         {{ include('admin.html.twig', { 'job': job }) }}
     {% endif %}
